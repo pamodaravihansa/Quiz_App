@@ -1,7 +1,9 @@
 import 'package:first_app/question.dart';
+import 'package:first_app/result.dart';
 import 'package:flutter/material.dart';
 
 import 'quiz.dart';
+import 'answer.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,8 +16,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
+  var _totalScore = 0;
 
-  void _answerQuestion() {
+  void _resetQuiz() {
+    setState(() {
+      var _questionIndex = 0;
+      var _totalScore = 0;
+    });
+  }
+
+  void _answerQuestion(int score) {
+    _totalScore += score;
+
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -29,31 +41,45 @@ class _MyAppState extends State<MyApp> {
     final _questions = const [
       {
         'questionText': 'What\'s your favourite color?',
-        'answers': ['Black', 'Red' 'Green', 'White'],
+        'answers': [
+          {'text': 'Black', 'score': 10},
+          {'text': 'Red', 'score': 5},
+          {'text': 'Green', 'score': 3},
+          {'text': 'White', 'score': 1},
+        ],
       },
       {
         'questionText': 'What\'s your favourite animal?',
-        'answers': ['Rabit', 'Snake' 'Elephant', 'Lion'],
+        'answers': [
+          {'text': 'Rabit', 'score': 3},
+          {'text': 'Snake', 'score': 11},
+          {'text': 'Elephant', 'score': 5},
+          {'text': 'Lion', 'score': 9},
+        ],
       },
       {
         'questionText': 'What\'s your favourite food?',
-        'answers': ['Ice Cream', 'Pizza' 'Water', 'Youghurt'],
+        'answers': [
+          {'text': 'Ice Cream', 'score': 3},
+          {'text': 'Pizza', 'score': 5},
+          {'text': 'Friend Chicken', 'score': 8},
+          {'text': 'Develled Frogs', 'score': 11},
+        ],
       },
     ];
 
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('This is app bar'),
-        ),
-        body: _questionIndex < _questions.length
-            ? Quiz(
-                answerQuestion: _answerQuestion,
-                questionIndex: _questionIndex,
-                questions: _questions,
-              )
-            : 
-      ),
+          appBar: AppBar(
+            title: Text('This is app bar'),
+          ),
+          body: _questionIndex < _questions.length
+              ? Quiz(
+                  answerQuestion: _answerQuestion,
+                  questionIndex: _questionIndex,
+                  questions: _questions,
+                )
+              : Result(_totalScore, _resetQuiz)),
     );
   }
 }
